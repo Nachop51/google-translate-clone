@@ -3,8 +3,8 @@ import { type LangState, type LangAction, type Language, type FromLanguage } fro
 import { AUTO_LANGUAGE } from '../constants'
 
 const initialState = {
-  fromLanguage: 'auto',
-  toLanguage: 'en',
+  fromLanguage: 'auto' as FromLanguage,
+  toLanguage: 'en' as Language,
   fromText: '',
   result: '',
   loading: false
@@ -14,35 +14,54 @@ function reducer (state: LangState, action: LangAction): LangState {
   const { type } = action
 
   switch (type) {
-    case 'SWAP_LANGUAGES':
+    case 'SWAP_LANGUAGES': {
       if (state.fromLanguage === AUTO_LANGUAGE) {
         return state
       }
+
+      const loading = state.fromText !== ''
 
       return {
         ...state,
         fromLanguage: state.toLanguage,
         toLanguage: state.fromLanguage,
         fromText: state.result,
-        result: ''
+        result: '',
+        loading
       }
-    case 'SET_FROM_LANGUAGE':
+    }
+    case 'SET_FROM_LANGUAGE': {
+      if (state.fromLanguage === action.payload) return state
+      const loading = state.fromText !== ''
+
       return {
         ...state,
-        fromLanguage: action.payload
+        fromLanguage: action.payload,
+        result: '',
+        loading
       }
-    case 'SET_TO_LANGUAGE':
+    }
+    case 'SET_TO_LANGUAGE':{
+      if (state.toLanguage === action.payload) return state
+      const loading = state.fromText !== ''
+
       return {
         ...state,
-        toLanguage: action.payload
+        toLanguage: action.payload,
+        result: '',
+        loading
       }
-    case 'SET_FROM_TEXT':
+    }
+    case 'SET_FROM_TEXT':{
+      const loading = action.payload !== ''
+
       return {
         ...state,
-        loading: true,
+        loading,
         fromText: action.payload,
         result: ''
       }
+    }
     case 'SET_RESULT':
       return {
         ...state,

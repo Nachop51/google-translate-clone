@@ -41,6 +41,7 @@ const TextArea: React.FC<Props> = ({ loading, type, value, onChange, placeholder
 
   return (
     <Form.Control
+      // @ts-expect-error - Something is wrong with CSS and typescript
       style={styles}
       as='textarea'
       rows={3}
